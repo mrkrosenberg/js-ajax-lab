@@ -3,10 +3,13 @@ $(function() {
 
 //create list items out of each book object
 
-	var books = $.ajax('https://den-super-crud.herokuapp.com/books')
+	
+function listBooks(){
+    var books = $.ajax('https://den-super-crud.herokuapp.com/books')
 	  .done( function(data){
-	  	console.log(data.books);
-//create new list elements for each book in the list and append those to the unordered list 
+	  	// console.log(data.books);
+
+//iterates through books and creates list items for each
 
 	for (i = 0; i < data.books.length; i++) {
 		$('<li></li>').text(data.books[i].title).appendTo($('#books'));
@@ -15,8 +18,12 @@ $(function() {
 		$('<li></li>').html('<img src=' + data.books[i].image + '>').appendTo($('#books'));
 	}
   });
-	
+}
+
+listBooks();
+
 //form submission
+
 	 $("#new-book").on("submit", function(event){
    	 		event.preventDefault(); 
     		var title = $('input#book-title').val();
@@ -35,12 +42,15 @@ $(function() {
     		};
 
 //Posts newBook to server
+
     		$.ajax({
     			type: "POST",
     			url: "https://den-super-crud.herokuapp.com/books",
     			data: newBook,
     			dataType: "JSON"
     			});
+            $('#books').empty();
+            listBooks();
 	});
 
 
